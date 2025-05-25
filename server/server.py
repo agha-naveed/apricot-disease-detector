@@ -9,9 +9,7 @@ import os
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for React frontend
-
-# Load your model (similar to your working console version)
+CORS(app)
 def load_model():
     model_path = "apricot_disease_model.pth"
     state_dict = torch.load(model_path, map_location=torch.device('cpu'))
@@ -31,7 +29,7 @@ def load_model():
     return model
 
 model = load_model()
-class_names = ['Brown_Rot', 'Healthy', 'Powdery_Mildew', 'Shot_Hole']  # Update with your actual classes
+class_names = ['Brown_Rot', 'Healthy', 'Powdery_Mildew', 'Shot_Hole']
 
 def transform_image(image_bytes):
     transform = transforms.Compose([
