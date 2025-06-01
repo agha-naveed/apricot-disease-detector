@@ -1,4 +1,3 @@
-# server.py
 from flask import Flask, request, jsonify
 import torch
 import torch.nn as nn
