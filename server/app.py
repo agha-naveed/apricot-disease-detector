@@ -6,9 +6,19 @@ from PIL import Image
 import io
 import os
 from flask_cors import CORS
+from waitress import serve
 
 app = Flask(__name__)
 CORS(app)
+
+model = None
+
+def get_model():
+    global model
+    if model is None:
+        model = load_model()
+    return model
+
 def load_model():
     model_path = "apricot_disease_model.pth"
     state_dict = torch.load(model_path, map_location=torch.device('cpu'))
@@ -27,7 +37,7 @@ def load_model():
     model.eval()
     return model
 
-model = load_model()
+model = get_model()
 class_names = ['Brown_Rot', 'Healthy', 'Powdery_Mildew', 'Shot_Hole']
 
 def transform_image(image_bytes):
@@ -67,4 +77,4 @@ def predict():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    serve(app, host="0.0.0.0", port=5000)
